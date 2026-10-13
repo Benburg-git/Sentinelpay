@@ -3,13 +3,14 @@ name: SentinelPay CI
 on:
   push:
     branches:
-      -publish/sanitized
-
+      - publish/sanitized
 
   pull_request:
     branches:
-      -publish/sanitized
+      - publish/sanitized
 
+  workflow_dispatch:
+    
 permissions:
   contents: read
 
