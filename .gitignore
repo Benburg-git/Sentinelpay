@@ -1,0 +1,31 @@
+# Terraform working directories
+**/.terraform/**
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Terraform plans
+tfplan
+*.tfplan
+
+# Terraform variable values
+terraform.tfvars
+*.auto.tfvars
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Lambda build artifacts
+infra/lambda/build/
+infra/lambda/*.zip
+/Amdari-Project--02/.env
+
+# Local credentials and generated files
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+*.pyo

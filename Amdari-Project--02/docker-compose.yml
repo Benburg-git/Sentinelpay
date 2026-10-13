@@ -1,0 +1,129 @@
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: sentinelpay-postgres
+    read_only: true
+
+    tmpfs:
+      - /var/run/postgresql
+      - /tmp
+
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password is required}
+      POSTGRES_DB: sentinelpay
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./seed/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel -d sentinelpay"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    security_opt:
+      - no-new-privileges:true
+
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    container_name: sentinelpay-redis
+    read_only: true
+
+    tmpfs:
+      - /var/lib/redis
+      - /data
+      - /tmp
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+    security_opt:
+      - no-new-privileges:true
+
+    networks:
+      - backend
+
+  payments-api:
+    build: ./services/payments-api
+    container_name: sentinelpay-payments
+
+    ports:
+      - "8001:8001"
+
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be configured}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY:?JWT_PRIVATE_KEY must be configured}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:?JWT_PUBLIC_KEY must be configured}
+
+      RATE_LIMIT_KEY_SECRET: ${RATE_LIMIT_KEY_SECRET:?RATE_LIMIT_KEY_SECRET must be configured}
+      SESSION_SIGNING_KEY: ${SESSION_SIGNING_KEY:?SESSION_SIGNING_KEY must be configured}
+
+      AWS_REGION: ${AWS_REGION:-af-south-1}
+      KYC_BUCKET: ${KYC_BUCKET:-sentinelpay-kyc-documents}
+
+      WEBHOOK_TIMEOUT: "10"
+      ENVIRONMENT: development
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    security_opt:
+      - no-new-privileges:true
+
+    networks:
+      - backend
+
+  kyc-api:
+    build: ./services/kyc-api
+    container_name: sentinelpay-kyc
+
+    ports:
+      - "8002:8002"
+
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be configured}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY:?JWT_PRIVATE_KEY must be configured}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:?JWT_PUBLIC_KEY must be configured}
+
+      AWS_REGION: ${AWS_REGION:-af-south-1}
+      KYC_BUCKET: ${KYC_BUCKET:-sentinelpay-kyc-documents}
+
+      BVN_CBN_URL: ${BVN_CBN_URL:?BVN_CBN_URL must be configured}
+      BVN_PROVIDER_NG_URL: ${BVN_PROVIDER_NG_URL:?BVN_PROVIDER_NG_URL must be configured}
+
+      ENVIRONMENT: development
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    security_opt:
+      - no-new-privileges:true
+
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge
