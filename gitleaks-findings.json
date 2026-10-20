@@ -1,0 +1,22 @@
+[
+ {
+  "RuleID": "sentinelpay-sensitive-env",
+  "Description": "Detect hardcoded SentinelPay sensitive environment variables",
+  "StartLine": 41,
+  "EndLine": 42,
+  "StartColumn": 2,
+  "EndColumn": 23,
+  "Match": "AWS_ACCESS_KEY_ID=\r\nREDACTED",
+  "Secret": "REDACTED",
+  "File": "Amdari-Project--02/.env.example",
+  "SymlinkFile": "",
+  "Commit": "3712137d1b4782695c8614779a49cadd323eb8c0",
+  "Entropy": 3.2089872,
+  "Author": "Benburg-git",
+  "Email": "sundaybenjaminabiodun@gmail.com",
+  "Date": "2026-10-13T04:34:47Z",
+  "Message": "﻿Initial sanitized SentinelPay project",
+  "Tags": [],
+  "Fingerprint": "3712137d1b4782695c8614779a49cadd323eb8c0:Amdari-Project--02/.env.example:sentinelpay-sensitive-env:41"
+ }
+]
