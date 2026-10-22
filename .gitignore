@@ -29,3 +29,7 @@ infra/lambda/*.zip
 __pycache__/
 *.pyc
 *.pyo
+
+# Generated security scan reports
+trivy-*-report.json
+gitleaks-findings.json
