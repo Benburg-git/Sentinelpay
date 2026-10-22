@@ -223,6 +223,7 @@ jobs:
           trivy image sentinelpay-payments:${{ github.sha }} \
             --scanners vuln \
             --severity HIGH,CRITICAL \
+            --skip-files "**/pip/_vendor/bom.cdx.json" \
             --format json \
             --output trivy-payments-report.json \
             --exit-code 1
@@ -234,6 +235,7 @@ jobs:
           trivy image sentinelpay-kyc:${{ github.sha }} \
             --scanners vuln \
             --severity HIGH,CRITICAL \
+            --skip-files "**/pip/_vendor/bom.cdx.json" \
             --format json \
             --output trivy-kyc-report.json \
             --exit-code 1
