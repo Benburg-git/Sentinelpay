@@ -1,0 +1,12 @@
+Amdari-Project--02/services/kyc-api/requirements.txt:1: trailing whitespace.
+[32m+[m[32m﻿flask>=2.3.2[m[41m[m
+Amdari-Project--02/services/kyc-api/requirements.txt:10: trailing whitespace.
+[32m+[m[32msetuptools>=78.1.1[m[41m[m
+Amdari-Project--02/services/kyc-api/requirements.txt:11: trailing whitespace.
+[32m+[m[32murllib3>=2.8.0,<3[m[41m[m
+Amdari-Project--02/services/payments-api/requirements.txt:1: trailing whitespace.
+[32m+[m[32m﻿[m[41m[m
+Amdari-Project--02/services/payments-api/requirements.txt:16: trailing whitespace.
+[32m+[m[32msetuptools>=78.1.1[m[41m[m
+Amdari-Project--02/services/payments-api/requirements.txt:17: trailing whitespace.
+[32m+[m[32murllib3>=2.8.0,<3[m[41m[m
